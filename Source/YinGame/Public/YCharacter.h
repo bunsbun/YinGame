@@ -28,15 +28,21 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
 
-	//UPROPERTY(EditAnywhere, Category = "Attack")
-	//UAnimMontage* AttackAnim;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
     TArray<UAnimMontage*> AnimMontages;
 
 	// Текущий индекс анимации
     int32 CurrentMontageIndex;
-	
+
+
+	// Коллизия для обнаружения ударов
+    UPROPERTY(VisibleAnywhere, Category = "Combat")
+    class UBoxComponent* PunchCollisionBox;
+
+	// Переменная для хранения урона
+    UPROPERTY(EditDefaultsOnly, Category = "Combat")
+    float PunchDamage;
+
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
@@ -58,6 +64,7 @@ protected:
 	// Функция для установки массива анимаций
     UFUNCTION(BlueprintCallable, Category = "Attack")
     void SetAnimMontages(TArray<UAnimMontage*> NewMontages);
+
 
 public:	
 	

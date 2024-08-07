@@ -2,6 +2,7 @@
 
 
 #include "YCharacter.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "DrawDebugHelpers.h"
@@ -23,19 +24,27 @@ AYCharacter::AYCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = true;
 
-	 CurrentMontageIndex = 0;
+	CurrentMontageIndex = 0;
 
-}
 
-void AYCharacter::SetAnimMontages(TArray<UAnimMontage*> NewMontages)
-{
-	 AnimMontages = NewMontages;
+	PunchCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("PunchCollisionBox"));
+    PunchCollisionBox->SetupAttachment(GetMesh(), FName("whip_04"));// Привязываем к мечу
+
+	PunchCollisionBox->SetCollisionProfileName(TEXT("Pawn"));
+    PunchCollisionBox->SetGenerateOverlapEvents(false);
+
+    PunchDamage = 20.0f; // Устанавливаем значение урона
 }
 
 void AYCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AYCharacter::SetAnimMontages(TArray<UAnimMontage*> NewMontages)
+{
+	 AnimMontages = NewMontages;
 }
 
 void AYCharacter::MoveForward(float Value)
@@ -68,6 +77,7 @@ void AYCharacter::StopJump()
 	 bPressedJump = false;
 }
 
+
 void AYCharacter::PrimaryAttack()
 {
 	if (AnimMontages.IsValidIndex(CurrentMontageIndex))
@@ -82,6 +92,7 @@ void AYCharacter::PrimaryAttack()
 		CurrentMontageIndex = 0;
 		PrimaryAttack();
 	}
+
 }
 
 
