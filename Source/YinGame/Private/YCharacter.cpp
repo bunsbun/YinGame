@@ -4,10 +4,15 @@
 #include "YCharacter.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "YPlayerComponents.h"
 #include "Camera/CameraComponent.h"
+#include "Engine/DamageEvents.h"
+#include "YInteractComponent.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Animation/AnimInstance.h"
+
+DEFINE_LOG_CATEGORY_STATIC(AYCharacterLog, All, All);
 
 AYCharacter::AYCharacter()
 {
@@ -32,13 +37,22 @@ AYCharacter::AYCharacter()
 
 	PunchCollisionBox->SetCollisionProfileName(TEXT("Pawn"));
     PunchCollisionBox->SetGenerateOverlapEvents(false);
-
+	 
     PunchDamage = 20.0f; // Устанавливаем значение урона
+
+	InteractionComponent = CreateDefaultSubobject<UYInteractComponent>("InteractionComp");
+
+	PlayerComponent = CreateDefaultSubobject<UYPlayerComponents>("PlayerComponent");
 }
 
 void AYCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+
+	check(PlayerComponent);
+
+	OnTakeAnyDamage.AddDynamic(this, &AYCharacter::OnTakeAnyDamageHandle);
 	
 }
 
@@ -46,6 +60,20 @@ void AYCharacter::SetAnimMontages(TArray<UAnimMontage*> NewMontages)
 {
 	 AnimMontages = NewMontages;
 }
+
+void AYCharacter::PrimaryInteract()
+{
+	if (InteractionComponent)
+	{
+		InteractionComponent->PrimaryInteract();
+	}
+}
+
+void AYCharacter::OnTakeAnyDamageHandle(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+	PlayerComponent->ApplyHealthChange(Damage);
+}
+
 
 void AYCharacter::MoveForward(float Value)
 {
@@ -100,6 +128,8 @@ void AYCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//TakeDamage(0.1f, FDamageEvent{}, Controller, this);
+
 }
 
 
@@ -117,6 +147,10 @@ void AYCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
     PlayerInputComponent->BindAction("Jump", IE_Released, this, &AYCharacter::StopJump);
 
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Released, this, &AYCharacter::PrimaryAttack);
+	
+	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AYCharacter::PrimaryInteract);
+
+
 
 }
 

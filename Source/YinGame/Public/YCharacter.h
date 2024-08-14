@@ -9,6 +9,8 @@
 class UCameraComponent;
 class USpringArmComponent;
 class UAnimMontage;
+class UYInteractComponent;
+class UYPlayerComponents;
 
 
 UCLASS()
@@ -34,7 +36,6 @@ protected:
 	// Текущий индекс анимации
     int32 CurrentMontageIndex;
 
-
 	// Коллизия для обнаружения ударов
     UPROPERTY(VisibleAnywhere, Category = "Combat")
     class UBoxComponent* PunchCollisionBox;
@@ -43,8 +44,14 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Combat")
     float PunchDamage;
 
-	virtual void BeginPlay() override;
+	UPROPERTY(VisibleAnywhere)
+	UYInteractComponent* InteractionComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UYPlayerComponents* PlayerComponent;
+
+protected:
+	
 	UFUNCTION()
 	void MoveForward(float Value);
 	
@@ -65,6 +72,12 @@ protected:
     UFUNCTION(BlueprintCallable, Category = "Attack")
     void SetAnimMontages(TArray<UAnimMontage*> NewMontages);
 
+	void PrimaryInteract();
+
+	UFUNCTION()
+	void OnTakeAnyDamageHandle(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	virtual void BeginPlay() override;
 
 public:	
 	
