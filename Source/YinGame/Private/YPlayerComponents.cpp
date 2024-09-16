@@ -14,19 +14,24 @@ UYPlayerComponents::UYPlayerComponents()
 void UYPlayerComponents::ApplyHealthChange(float Damage)
 {
 	Health = FMath::Max(0, Health - Damage);
+	if(Health > 100.0f)
+	{
+		Health = 100.0f;
+		return;
+	}
 	OnHealthChanged.Broadcast(Health);
 
 	UE_LOG(LogHealthComponent, Display, TEXT("Health: %f") ,Health);
 }
 
+bool UYPlayerComponents::IsAlive() const
+{
+	return Health > 0.0f;
+}
+
 void UYPlayerComponents::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//AActor* MainCharacter = GetOwner();
-	//if(MainCharacter){
-	//	MainCharacter->OnTakeAnyDamage.AddDynamic(this, &UYPlayerComponents::OnTakeAnyDamageHandle);
-	//}
 	
 }
 

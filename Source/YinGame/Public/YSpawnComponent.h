@@ -1,29 +1,31 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "YInteractComponent.generated.h"
+#include "YSpawnComponent.generated.h"
 
+class AYBottleHealth;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-//UActorComponent - про взамодойствие. Ќекий мост между актором и характером. ћожем описать поведение актора 
-class YINGAME_API UYInteractComponent : public UActorComponent
+class YINGAME_API UYSpawnComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:
-
-	void PrimaryInteract();
-
 public:	
 
-	UYInteractComponent();
+	UYSpawnComponent();
+
+	UFUNCTION()
+	void SpawnBottleHealth();
 
 protected:
 	
 	virtual void BeginPlay() override;
+
+
+
+	//UPROPERTY()
+ //   AYBottleHealth* CurrentBottleHealth;
 
 public:	
 

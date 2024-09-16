@@ -50,6 +50,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UYPlayerComponents* PlayerComponent;
 
+
 protected:
 	
 	UFUNCTION()
@@ -76,6 +77,9 @@ protected:
 
 	UFUNCTION()
 	void OnTakeAnyDamageHandle(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	UFUNCTION(BlueprintCallable, Category = "Teleport")
+    void TeleportToSelectedActor(AActor* SelectedActor);
 
 	virtual void BeginPlay() override;
 

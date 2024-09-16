@@ -1,6 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
+#include "YPlayerComponents.h"
+#include "YCharacter.h"
+#include "YBottleHealth.h"
+#include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
+#include "YSpawnComponent.h"
 #include "YHealthMachine.h"
 
 
@@ -13,35 +17,27 @@ AYHealthMachine::AYHealthMachine()
 	MachineComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MachineComponent"));
 	RootComponent = MachineComponent;
 
-	BottleHealthComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BottleHealthComponent"));
-	BottleHealthComponent->SetupAttachment(MachineComponent);
-	
-	BottleHealthComponent->SetVisibility(false);
+	SpawnComponent = CreateDefaultSubobject<UYSpawnComponent>(TEXT("SpawnComponent"));
+
 
 
 }
 
 
-// Called when the game starts or when spawned
 void AYHealthMachine::BeginPlay()
 {
 	Super::BeginPlay();
 
-	check(BottleHealthComponent);
 	
 }
 
-
 void AYHealthMachine::Interact_Implementation(APawn* InstigatorPawn)
 {
-	BottleHealthComponent->SetVisibility(true);
-
-
-	UE_LOG(LogTemp, Warning, TEXT("ExecuteAction called in MyActor!"));
+	
+	SpawnComponent->SpawnBottleHealth();
+	
 }
 
-
-// Called every frame
 void AYHealthMachine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

@@ -7,6 +7,9 @@
 #include "GameFramework/Actor.h"
 #include "YHealthMachine.generated.h"
 
+class UYPlayerComponents;
+class AYBottleHealth;
+class UYSpawnComponent;
 
 UCLASS()
 class YINGAME_API AYHealthMachine : public AActor, public IYGameplayInterface
@@ -28,9 +31,21 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
     UStaticMeshComponent* MachineComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-    UStaticMeshComponent* BottleHealthComponent;
+	UPROPERTY(EditAnywhere)
+    AYBottleHealth* BottleHealth;
 
+	UPROPERTY(EditAnywhere)
+    UYSpawnComponent* SpawnComponent;
+
+
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+ //   AYBottleHealth* BottleHealth;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+ //   AYBottleHealth* BottleHealth;
+private:
+
+	//UPROPERTY(EditAnywhere)
+	//TSubclassOf<AYBottleHealth> BottleHealth;
 
 protected:
 	
@@ -38,7 +53,8 @@ protected:
 
 private:
 
-	
+	/*UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);*/
 
 
 };

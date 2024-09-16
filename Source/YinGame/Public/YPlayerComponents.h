@@ -18,6 +18,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Attributes")
 	void ApplyHealthChange(float Damage);
 
+	UFUNCTION(BlueprintCallable)
+	bool IsAlive() const;
+
+	UFUNCTION()
+	const float GetHealthPlayer() const { return Health;}
+
 protected:
 
 	virtual void BeginPlay() override;

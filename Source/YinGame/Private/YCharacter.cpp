@@ -68,12 +68,28 @@ void AYCharacter::PrimaryInteract()
 		InteractionComponent->PrimaryInteract();
 	}
 }
-
+#pragma optimize ("", off)
 void AYCharacter::OnTakeAnyDamageHandle(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
 	PlayerComponent->ApplyHealthChange(Damage);
+	
+	if(PlayerComponent->GetHealthPlayer() == 0.0f)
+	{
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		DisableInput(PC);
+	}
 }
+void AYCharacter::TeleportToSelectedActor(AActor* SelectedActor)
+{
+	if (SelectedActor)
+    {
+        FVector TargetLocation = SelectedActor->GetActorLocation();
 
+        // Перемещаемся на позицию объекта с небольшой высотой для корректного расположения над землей
+        SetActorLocation(TargetLocation + FVector(0.f, 0.f, 50.f));
+    }
+}
+#pragma optimize ("", on)
 
 void AYCharacter::MoveForward(float Value)
 {

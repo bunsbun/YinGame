@@ -34,9 +34,9 @@ void UYInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
+// € Yin и вызываю функцию PrimaryInteract через E
 void UYInteractComponent::PrimaryInteract()
 {
-
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
 
@@ -63,13 +63,20 @@ void UYInteractComponent::PrimaryInteract()
 
 	for(FHitResult Hit : Hits)
 	{
+		//сюда приходит актер в которым было столкновение
 		AActor* HitActor = Hit.GetActor();
 		if(HitActor)
 		{
+			//эта строка провер€ет, реализует ли объект HitActor 
+			// интерфейс UYGameplayInterface.
+			     // Implements<UYGameplayInterface>() Ч это шаблонна€ функци€,
+			     // встроенна€ в Unreal Engine, котора€ провер€ет, реализует ли 
+			     // указанный объект интерфейс UYGameplayInterface.
 			if(HitActor->Implements<UYGameplayInterface>())
 			{
 				APawn* MyPawn = Cast<APawn>(MyOwner);
 
+				//найди мне у кого есть функци€ Interact чтобы повзаимодействовать 
 				IYGameplayInterface::Execute_Interact(HitActor, MyPawn);
 				break;
 			}
