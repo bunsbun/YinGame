@@ -8,12 +8,20 @@ UYPlayerComponents::UYPlayerComponents()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	Health = 100.0f;
+	NowHealth = Health;
+
 
 }
 
 void UYPlayerComponents::ApplyHealthChange(float Damage)
 {
 	Health = FMath::Max(0, Health - Damage);
+
+	if (Health != NowHealth)
+	{
+		NowHealth = Health;
+	}
+
 	if(Health > 100.0f)
 	{
 		Health = 100.0f;
@@ -21,7 +29,7 @@ void UYPlayerComponents::ApplyHealthChange(float Damage)
 	}
 	OnHealthChanged.Broadcast(Health);
 
-	UE_LOG(LogHealthComponent, Display, TEXT("Health: %f") ,Health);
+	//UE_LOG(LogHealthComponent, Display, TEXT("Health: %f") ,Health);
 }
 
 bool UYPlayerComponents::IsAlive() const
@@ -29,10 +37,10 @@ bool UYPlayerComponents::IsAlive() const
 	return Health > 0.0f;
 }
 
+
 void UYPlayerComponents::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 

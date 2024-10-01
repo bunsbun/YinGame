@@ -33,6 +33,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
 	float Health;
 
+	UPROPERTY()
+	float NowHealth;
+
 	// HealthMax, Stamina, Strength
 	
 	//BlueprintAssignable - можно использовать в блюпринтах
