@@ -1,12 +1,14 @@
 #include "YSpawnComponent.h"
 #include "YBottleHealth.h"
-#include <Kismet/GameplayStatics.h>
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 UYSpawnComponent::UYSpawnComponent()
 {
 
 	PrimaryComponentTick.bCanEverTick = true;
+	CurrentBottleHealth = CreateDefaultSubobject<AYBottleHealth>(TEXT("CurrentBottleHealth"));
 
 
 }
@@ -16,25 +18,13 @@ UYSpawnComponent::UYSpawnComponent()
 void UYSpawnComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-
 	
 }
 
-void UYSpawnComponent::SpawnBottleHealth()
+void UYSpawnComponent::SpawnBottleHealth(FVector& BoxCenter, FVector& BoxExtent)
 {
-    AActor* Owner = GetOwner();
-    //CurrentBottleHealth = Owner->GetWorld()->SpawnActor<AYBottleHealth>(AYBottleHealth::StaticClass());
-    AActor* Actor = UGameplayStatics::GetActorOfClass(Owner->GetWorld(),AYBottleHealth::StaticClass());
-	if(Actor)
-	{
-		AYBottleHealth* CurrentBottleHealth = Cast<AYBottleHealth>(Actor);
-		if(CurrentBottleHealth)
-		{
-			CurrentBottleHealth->SetVisibilityBottle();
-		}
-		
-	}
+	FVector RandomLocation = UKismetMathLibrary::RandomPointInBoundingBox(BoxCenter, BoxExtent);
+
 }
 
 

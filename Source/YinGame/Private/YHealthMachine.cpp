@@ -1,13 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "YHealthMachine.h"
-#include "YPlayerComponents.h"
-#include "YCharacter.h"
-#include "YBottleHealth.h"
-#include "Engine/World.h"
-#include "Kismet/GameplayStatics.h"
 #include "YSpawnComponent.h"
-
-
+#include "Components/BoxComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AYHealthMachine::AYHealthMachine()
@@ -19,24 +14,20 @@ AYHealthMachine::AYHealthMachine()
 	RootComponent = MachineComponent;
 
 	SpawnComponent = CreateDefaultSubobject<UYSpawnComponent>(TEXT("SpawnComponent"));
-
-
+	AreaForBottles = CreateDefaultSubobject<UBoxComponent>(TEXT("AreaForBottles"));
 
 }
 
-
 void AYHealthMachine::BeginPlay()
 {
-	Super::BeginPlay();
-
-	
+	Super::BeginPlay();	
 }
 
 void AYHealthMachine::Interact_Implementation(APawn* InstigatorPawn)
 {
-	
-	SpawnComponent->SpawnBottleHealth();
-	
+
+	OnSpawnComponent.Broadcast(YSpawnModel::BOTTLE_HEALTH);
+
 }
 
 void AYHealthMachine::Tick(float DeltaTime)

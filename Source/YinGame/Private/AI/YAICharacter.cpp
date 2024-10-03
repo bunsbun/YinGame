@@ -9,31 +9,36 @@ AYAICharacter::AYAICharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	PatrolLocation = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
-
-	PunchCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("PunchCollisionBox"));
-    PunchCollisionBox->SetupAttachment(GetMesh(), FName("HammerCenter"));// Привязываем к мечу
-
-	//PunchCollisionBox->SetCollisionProfileName(TEXT("Pawn"));
- //   PunchCollisionBox->SetGenerateOverlapEvents(false);
-
-	PunchCollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	PunchCollisionBox->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-	PunchCollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	PlayerComponent = CreateDefaultSubobject<UYPlayerComponents>(TEXT("PlayerComponent"));
 
 	CurrentMontageIndex = 0;
 	DamageInterval = 5.0f;
 	OverlappingActor = nullptr;
 
+	Health = 100.f;
+
 }
+
 
 
 void AYAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	PunchCollisionBox->OnComponentHit.AddDynamic(this, &ThisClass::HitPlayer);
+
+	//HammerCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//PlayerComponent->OnHealthChanged.AddDynamic(this, &ThisClass::ApplyHealthChanged);
 
 }
 
+void AYAICharacter::HitCharacter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor && OtherActor != this && OtherActor->IsA(AYCharacter::StaticClass()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("OverlappedComponent %s !"), *OverlappedComponent->GetName());
+	}
+	
+}
 
 void AYAICharacter::SetAnimMontages(TArray<UAnimMontage*> NewMontages)
 {
@@ -43,37 +48,36 @@ void AYAICharacter::SetAnimMontages(TArray<UAnimMontage*> NewMontages)
 
 void AYAICharacter::HitPlayer(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-
- 	 if (OtherActor != this)
-    {
-        OverlappingActor = OtherActor;
-		//DoHit(OtherActor);
-        UE_LOG(LogTemp, Warning, TEXT("Actor %s was hit!"), *OtherActor->GetName());
-    }
+	UE_LOG(LogTemp, Warning, TEXT("Actor %s was hit!"), *OtherActor->GetName());
+	UE_LOG(LogTemp, Error, TEXT("Actor %s was suck!"), *this->GetName());
 }
 
-void AYAICharacter::DoHit(AActor* OtherActor)
+//void AYAICharacter::DoHit(AActor* OtherActor)
+//{
+//
+//	if (AYCharacter* PlayerActor = Cast<AYCharacter>(OtherActor))
+//	{
+//		UYPlayerComponents* PlayerComp = PlayerActor->FindComponentByClass<UYPlayerComponents>();
+//		GetWorldTimerManager().SetTimer(DamageTimerHandle, this, &ThisClass::ApplyDamage, DamageInterval, true);
+//		//PlayerComp->ApplyHealthChange(HitPower);
+//	}	
+//}
+
+//void AYAICharacter::ApplyDamage()
+//{
+//	if (OverlappingActor)
+//	{
+//		DoHit(OverlappingActor);
+//	}
+//	
+//}
+
+void AYAICharacter::ApplyHealthChanged(float NewHealth)
 {
 
-	if (AYCharacter* PlayerActor = Cast<AYCharacter>(OtherActor))
-	{
-		UYPlayerComponents* PlayerComp = PlayerActor->FindComponentByClass<UYPlayerComponents>();
-		GetWorldTimerManager().SetTimer(DamageTimerHandle, this, &ThisClass::ApplyDamage, DamageInterval, true);
-		//PlayerComp->ApplyHealthChange(HitPower);
-
-	}
-
-	
 }
 
-void AYAICharacter::ApplyDamage()
-{
-	if (OverlappingActor)
-	{
-		DoHit(OverlappingActor);
-	}
-	
-}
+
 
 void AYAICharacter::PrimaryAttack()
 {

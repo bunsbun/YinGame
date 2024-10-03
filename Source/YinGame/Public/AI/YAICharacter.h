@@ -2,11 +2,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/WidgetComponent.h"
+#include "YPlayerComponents.h"
 #include "YAICharacter.generated.h"
 
 
 class UBoxComponent;
 class UAnimMontage;
+class UYPlayerComponents;
 
 UCLASS()
 class YINGAME_API AYAICharacter : public ACharacter
@@ -35,10 +38,6 @@ protected:
 	// Текущий индекс анимации
     int32 CurrentMontageIndex;
 
-	// Коллизия для обнаружения ударов
-    UPROPERTY(VisibleAnywhere, Category = "Combat")
-    class UBoxComponent* PunchCollisionBox;
-
 	UPROPERTY()
     AActor* OverlappingActor;
 
@@ -49,6 +48,15 @@ protected:
 	UPROPERTY()
     float DamageInterval;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+    UWidgetComponent* HealthWidgetComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UYPlayerComponents* PlayerComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	int32 Health;
+
 	// Функция для установки массива анимаций
     UFUNCTION(BlueprintCallable, Category = "Attack")
     void SetAnimMontages(TArray<UAnimMontage*> NewMontages);
@@ -57,11 +65,21 @@ protected:
 	void HitPlayer (UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 		FVector NormalImpulse, const FHitResult& Hit);
 
-	UFUNCTION()
-	void DoHit(AActor* OtherActor);
+	//UFUNCTION()
+	//void DoHit(AActor* OtherActor);
+
+	//UFUNCTION()
+	//void ApplyDamage();
 
 	UFUNCTION()
-	void ApplyDamage();
+	void HitCharacter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+
+	UFUNCTION()
+	void ApplyHealthChanged(float NewHealth);
+
+
 
 public:
 	// Функция для начала проигрывания анимаций

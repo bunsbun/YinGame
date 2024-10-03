@@ -16,9 +16,6 @@ public:
 
 	AYBottleHealth();
 
-	UFUNCTION()
-	void SetState();
-
 protected:
 
 	virtual void BeginPlay() override;
@@ -41,8 +38,6 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION()
-	void SetVisibilityBottle();
 
 private:
 
@@ -51,9 +46,5 @@ private:
 private:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
-	UFUNCTION()
-	void SpawnBottleHealth();
-
 
 };

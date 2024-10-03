@@ -24,6 +24,10 @@ public:
 	UFUNCTION()
 	const float GetHealthPlayer() const { return Health;}
 
+	//BlueprintAssignable - можно использовать в блюпринтах
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthChanged OnHealthChanged;
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -38,9 +42,7 @@ protected:
 
 	// HealthMax, Stamina, Strength
 	
-	//BlueprintAssignable - можно использовать в блюпринтах
-	UPROPERTY(BlueprintAssignable)
-	FOnHealthChanged OnHealthChanged;
+
 
 
 

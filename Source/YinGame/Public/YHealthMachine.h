@@ -10,6 +10,17 @@
 class UYPlayerComponents;
 class AYBottleHealth;
 class UYSpawnComponent;
+class UBoxComponent;
+
+UENUM(BlueprintType) 
+enum class YSpawnModel : uint8
+{
+	BOTTLE_HEALTH  UMETA(DisplayName = "BOTTLE_HEALTH"),
+	BOTTLE_STAMINA UMETA(DisplayName = "BOTTLE_STAMINA"),
+	BOTTLE_SPEED   UMETA(DisplayName = "BOTTLE_SPEED")
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpawnComponent, YSpawnModel, SpawnModel);
 
 UCLASS()
 class YINGAME_API AYHealthMachine : public AActor, public IYGameplayInterface
@@ -20,7 +31,7 @@ public:
 	// Sets default values for this actor's properties
 	AYHealthMachine();
 
-public:	
+public:
 
 	void Interact_Implementation(APawn* InstigatorPawn);
 
@@ -32,29 +43,23 @@ protected:
     UStaticMeshComponent* MachineComponent;
 
 	UPROPERTY(EditAnywhere)
-    AYBottleHealth* BottleHealth;
-
-	UPROPERTY(EditAnywhere)
     UYSpawnComponent* SpawnComponent;
 
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* AreaForBottles;
 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
- //   AYBottleHealth* BottleHealth;
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
- //   AYBottleHealth* BottleHealth;
+	UPROPERTY(EditAnywhere)
+	FVector RandomLocation;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnSpawnComponent OnSpawnComponent;
+
 private:
 
-	//UPROPERTY(EditAnywhere)
-	//TSubclassOf<AYBottleHealth> BottleHealth;
 
 protected:
 	
 	virtual void BeginPlay() override;
-
-private:
-
-	/*UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);*/
 
 
 };

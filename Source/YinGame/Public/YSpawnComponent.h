@@ -4,6 +4,8 @@
 #include "Components/ActorComponent.h"
 #include "YSpawnComponent.generated.h"
 
+
+
 class AYBottleHealth;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -16,16 +18,14 @@ public:
 	UYSpawnComponent();
 
 	UFUNCTION()
-	void SpawnBottleHealth();
+	void SpawnBottleHealth(FVector& BoxCenter, FVector& BoxExtent);
 
 protected:
 	
 	virtual void BeginPlay() override;
 
-
-
-	//UPROPERTY()
- //   AYBottleHealth* CurrentBottleHealth;
+	UPROPERTY()
+    AYBottleHealth* CurrentBottleHealth;
 
 public:	
 
